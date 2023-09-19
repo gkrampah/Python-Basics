@@ -151,6 +151,11 @@ A Boolean value is either true or false. It is named after the British mathemati
 
 In Python, the two Boolean values are True and False (the capitalization must be exactly as shown), and the Python type is bool. Six common comparison operators which all produce a bool result; here are all six: ==, !=, <,>,<=,>=. Also, there is no such thing as =< or =>.
 
+### Type conversion
+int("45")
+float(22)
+str(32)
+
 ### Logical operators
 There are three logical operators, and, or, and not, that allow us to build more complex Boolean expressions from simpler Boolean expressions. The semantics (meaning) of these operators is similar to their meaning in English. For example, x > 0 and x < 10 produces True only if x is greater than 0 and at the same time, x is less than 10.
 
@@ -192,3 +197,99 @@ def find_first_2_letter_word(xs):
     return ""
     
 find_first_2_letter_word(["This",  "is", "a", "dead", "parrot"])
+
+## Composition
+
+You can call one function from within another. This ability is called composition.
+def area_circle_composite(xc, yc, xp, yp):
+    return area_circle(distance(xc, yc, xp, yp))
+
+## Boolean functions
+def is_divisible(x, y):
+    """ Test if x is exactly divisible by y """
+    if x % y == 0:
+        return True
+    else:
+        return False
+
+def is_divisible(x, y):
+    return x % y == 0
+
+Boolean functions are often used in conditional statements:
+if is_divisible(x, y):
+    ... # Do something ...
+else:
+    ... # Do something else ...
+
+
+## Unit testing 
+Unit testing provides a way to automatically verify that individual pieces of code, such as functions, are working properly. Unit testing also forces the programmer to think about the different cases that the function needs to handle. Extra code in your program which is there because it makes debugging or testing easier is called scaffolding. A collection of tests for some code is called its test suite (check notebook for examples). There is a built-in Python statement called assert that does almost the same as our test function (except the program stops when the first assertion fails). You may want to read about it, and use it instead of our test function.
+
+
+## Assignment 
+It is crucial to distinguish between an assignment statement, "=" and a Boolean expression that tests for equality, "==". Because Python uses the equal token (=) for assignment, it is tempting to interpret a statement like a = b as a Boolean test. An equality test is symmetric, but assignment is not. Eg, if a == 7 then 7 == a. But in Python, the statement a = 7 is legal and 7 = a is not.
+
+When an assignment statement is executed, the right-hand side expression (i.e. the expression that comes after the assignment token) is evaluated first. This produces a value. Then the assignment is made, so that the variable on the left-hand side now refers to the new value. One of the most common forms of assignment is an update, where the new value of the variable depends on its old value.
+Eg: x = 4, x = x+3
+Before you can update a variable, you have to initialize it to some starting value, usually with a simple assignment: x = 0, x+=1
+
+Programmers talk about bumping a variable, and this means the same as incrementing it by 1.
+
+## Iteration
+for and while loops. for and while loops do their tests at the start, before executing any part of the body. They’re called pre-test loops, because the test happens before (pre) the body. break and return are our tools for adapting this standard behaviour.
+
+
+The 'break' statement is used to immediately leave the body of its loop.
+for i in [12, 16, 17, 24, 29]:
+    if i % 2 == 1:  # If the number is odd
+       break        #  ... immediately exit the loop
+    print(i)
+print("done")
+
+'continue' statement that causes the program to immediately skip the processing of the rest of the body of the loop, for the current iteration. But the loop still carries on running for its remaining iterations:
+for i in [12, 16, 17, 24, 29, 30]:
+    if i % 2 == 1:      # If the number is odd
+       continue         # Don't process it
+    print(i)
+print("done")
+## Local variables and scopes
+Variables created inside a function definition are local; you can’t access a local variable from outside its home function.
+
+## Paired data
+year_born = ("Paris Hilton", 1981)
+celebs = [("Brad Pitt", 1963), ("Jack Nicholson", 1937), ("Justin Bieber", 1994)]
+for (nm, yr) in celebs: #unpacking tuple
+   if yr < 1980:
+        print(nm)
+Here, the loop is executed three times — once for each pair in the list, and on each iteration both the variables are assigned values from the pair of data that is being handled.
+
+
+
+## Python Memory Management
+x = 34. This means an integer object 34 is created in memory and the a reference assigned to variable x. y = x, is also referencing the same memory address. Python interpreter receives itws share of memory from the OS and this memory is further divided into stack and heap memory. stack memory holds the references (execution starts here, methods and variables are created here ) and heap memory holds the object (i.e. objects and instance variables are created). Stack frames are destroyed as soon as the function/method returns.
+
+Note that what we call variables in Python are not the same as in other programming languages like c. variables in python are actually names not variables. Python objects are stored in momory as names, references and objects. 
+
+### types of objects:
+
+* simple: numbers and strings
+
+* Containers: dict, list, set, tuple and user defined class
+
+References are names or container objects that point at other objects
+reference count gives the number of reference to an object in memory. eg: x = 3, y = 3, z = [3,3], the ref count is 4. Now if x = True, y = None or del x
+
+del statement doesnt delete object but remove that name as ref to an object reducing the ref count by one. 
+def greetings():
+    greeting = 'dag' # ref count for greeting is +1
+    return greeting
+greetings() # ref count for greeting -1 and greeting goes out of scope because it is in the local scope of the function
+
+in the global scope or namespace, objects never go out of scope and ref count never reaches 0. Moral: avoid putting large or complex objects in the global namespace.
+
+Pyobject hold three things: type, ref count and value
+
+Garbage collection is a way to free up space in memory when the object taking up space is no longer in use. Types of garbage collection in python: reference counting and tracing. 
+### Reference Counting Garbage collection
+Delete obj when ref count is zero. Downside to ref count is the space ovehead (stored for every object) and execution overhead (ref count changes for every assignment) an finally it is not thread safe (i.e. what happens when two threads try to increase and decrease the ref count at the same time) and ref counting will not garbage collect obj with cyclical refs.
+### Tracing Garbage collection
