@@ -292,4 +292,28 @@ Pyobject hold three things: type, ref count and value
 Garbage collection is a way to free up space in memory when the object taking up space is no longer in use. Types of garbage collection in python: reference counting and tracing. 
 ### Reference Counting Garbage collection
 Delete obj when ref count is zero. Downside to ref count is the space ovehead (stored for every object) and execution overhead (ref count changes for every assignment) an finally it is not thread safe (i.e. what happens when two threads try to increase and decrease the ref count at the same time) and ref counting will not garbage collect obj with cyclical refs.
-### Tracing Garbage collection
+### Tracing (Generational) Garbage collection
+Mark and sweep: Runs when the number of objects in memory is greater than a certain threshold. Starts at the root and traverse the ref graph, following all the refs and marking the reachable one. The sweep phase will remove any unreachable obj. How does generalional gc work in python, python make three list (generation 0 newly created obj, generation 1 obj that pass gc get promoted) of all objects created as a program run. only container obj with refcount greater than 0 will be stored in a generational list. When the no of objs in a generation reaches a threshold, python runs a gc algorithm on that generation and any generation younger than it.
+
+## GIL - Global Interpreter Lock
+Prevents multiple python threads from executing python code at the same time. There is one GIL for each interpreter. Only one thread can run in the interpreter at a time. Upside: ref count is fast and easy to implement. Downside: only one thread can be executed at a time.
+
+One can take advantage of multiple cores using multi-processing instead of multi-threading.
+
+## Programming Paradigms
+There are various ways to break down problems in programming languages:
+
+Most programming languages follow a procedural approach where the program comprises a list of instructions that guide the computer on what to do with the input. Procedural languages include C, Pascal, and Unix shells.
+
+Declarative languages, on the other hand, require you to create a specification that describes the problem to be solved, and the language implementation decides how to compute the solution efficiently. SQL is a declarative language that you may be familiar with. In SQL, a query illustrates the data set you want to retrieve, and the SQL engine determines whether to scan tables or use indexes, which subclauses should be performed first, and so on.
+
+Object-oriented programming involves manipulating collections of objects that have internal state and methods that query or modify this state. Smalltalk and Java are examples of object-oriented languages, while C++ and Python support object-oriented programming without enforcing the use of object-oriented features.
+
+Functional programming, on the other hand, breaks down problems into a set of functions. In an ideal scenario, functions only accept inputs and generate outputs without having internal state that influences the output for a given input. Well-known functional languages include the ML family (Standard ML, OCaml, and other variants) and Haskell. It has the advantage that is allows for modularity, testing and debugging and reusability of code
+
+## Functional Programming in Python
+In an imperative language (object-oriented or procedural), like Python, the state of the computation is reflected by the values of the variables in the various namespaces. Each kind of statement is a command and makes a change to the state (i.e. changing values of a variables). To explain the concept
+
+In a functional language, we replace changing of state (ie.changing values of variables) with a simpler notion of evaluating functions. Each function evaluation creates a new object or objects from existing objects. Functional programs tend to be relatively succinct,
+expressive, and efficient when compared to imperative (object-oriented or procedural)
+programs.
