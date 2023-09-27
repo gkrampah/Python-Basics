@@ -312,8 +312,57 @@ Object-oriented programming involves manipulating collections of objects that ha
 Functional programming, on the other hand, breaks down problems into a set of functions. In an ideal scenario, functions only accept inputs and generate outputs without having internal state that influences the output for a given input. Well-known functional languages include the ML family (Standard ML, OCaml, and other variants) and Haskell. It has the advantage that is allows for modularity, testing and debugging and reusability of code
 
 ## Functional Programming in Python
-In an imperative language (object-oriented or procedural), like Python, the state of the computation is reflected by the values of the variables in the various namespaces. Each kind of statement is a command and makes a change to the state (i.e. changing values of a variables). To explain the concept
+In an imperative language (object-oriented or procedural), like Python, the state of the computation is reflected by the values of the variables in the various namespaces. Each kind of statement is a command and makes a change to the state (i.e. changing values of a variables). To explain the concept, we use these example codes to explain:
+x = 0
+for y in range(1, 20):
+    if y % 3 == 0 or y % 5 == 0:
+        x += y
+print(x)
+this program strictly procedural.
+
+data = []
+for n in range(1, 20):
+    if n % 3 == 0 or n % 5 == 0:
+        data.append(n)
+print(sum(data))
+This program produces the same result but it accumulates a stateful collection object, data, as it proceeds. The state of the computation is defined by the values of the variables, data and n. All these examples rely on variables to explicitly show the state of the
+program. They rely on the assignment (=) statements to change the values of the variables and advance the computation toward completion.
 
 In a functional language, we replace changing of state (ie.changing values of variables) with a simpler notion of evaluating functions. Each function evaluation creates a new object or objects from existing objects. Functional programs tend to be relatively succinct,
-expressive, and efficient when compared to imperative (object-oriented or procedural)
-programs.
+expressive, and efficient when compared to imperative (object-oriented or procedural) programs. An example functional program for the same previous algorithms
+
+def until(n, filter_func, v):
+    if v == n: 
+        return []
+    if filter_func(v): 
+        return [v] + until( n, filter_func, v+1 )
+    else: 
+        return until(n, filter_func, v+1)
+def sum(seq):
+    if len(seq) == 0: 
+        return 0
+    return seq[0] + sum(seq[1:])
+
+mult_3_5= lambda x: x%3==0 or x%5==0
+until(10, mult_3_5, 0), sum(until(10, mult_3_5, 0))
+[0, 3, 5, 6, 9], 23
+
+Higher-order functions: These are functions that accept a function as an argument or return a function as a value.
+
+### Strict and non-strict evaluation
+
+The idea of lazy or non-strict evaluation is very helpful as it defers a computation until it's required. In Python, the logical expression operators and, or, and if-then-else are all non-strict. We sometimes call them short-circuit operators because they don't need
+to evaluate all arguments to determine the resulting value. When the left-hand side of the operator is equivalent to False; the right-hand side is not evaluated. When the left-hand side is equivalent to True, the right-hand side is evaluated. Outside the logical operators, an expression is
+evaluated eagerly from left-to-right. A sequence of statement lines is also evaluated strictly in order. Literal lists and tuples require eager evaluation
+
+Python's generator expressions and generator functions, however, are lazy. These
+expressions don't create all possible results immediately.
+
+When a class is created, the method functions are defined in a strict order and collected in a dictionary. If we provide two methods with
+the same name, the second one is retained because of the strict evaluation order.
+
+
+how do you inted to reducce the cist 
+what data do you get from the national bel bank
+
+climate change and remittances
